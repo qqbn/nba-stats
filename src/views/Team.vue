@@ -25,11 +25,7 @@
     <div class="games-container">
       <h5>Last 5 games</h5>
       <ul>
-        <router-link :to="{name: 'GameScore'}"> <li><span class="team">DEN</span> 101 - SAC 102 <span class="win">W</span> <span class="lose">L</span></li> </router-link>
-        <li><span class="team">DEN</span> 101 - SAC 102 <span class="win">W</span> <span class="lose">L</span></li>
-        <li><span class="team">DEN</span> 101 - SAC 102 <span class="win">W</span> <span class="lose">L</span></li>
-        <li><span class="team">DEN</span> 101 - SAC 102 <span class="win">W</span> <span class="lose">L</span></li>
-        <li><span class="team">DEN</span> 101 - SAC 102 <span class="win">W</span> <span class="lose">L</span></li>
+        <li v-for="game in lastGames" :key="game.id">  <router-link :to="{name: 'GameScore', params: { id: game.id }}"> <span class="team"> {{game.home_team.abbreviation}}</span>  {{game.home_team_score}} - <span class="team"> {{game.visitor_team.abbreviation}}</span> {{game.visitor_team_score}} </router-link><span class="win" v-show="whoWin(game)">W</span> <span class="lose" v-show="!whoWin(game)">L</span> </li>
       </ul>
 
       <p class="more-games">To see stats from the game, tap on it!</p>
@@ -39,6 +35,7 @@
 </template>
 
 <script>
+import { compile } from 'vue';
 export default {
   props: ['id'],
   data(){
@@ -49,6 +46,7 @@ export default {
       teamConference: null,
       teamDivision: null,
       teamAbbreviation: null,
+      lastGames:[],
     }
   },
   methods:{
@@ -59,12 +57,41 @@ export default {
       this.teamDivision=data.division;
       this.teamAbbreviation=data.abbreviation;
     },
+    getLastGames(data){
+      data.data.reverse();
+      data.data.forEach(element => {
+        if(this.lastGames.length<5){
+          this.lastGames.push(element);
+        }
+      });
+      console.log(this.lastGames);
+    },
+    whoWin(n){
+      this.homeTeamScore=n.home_team_score;
+      this.visitorTeamScore=n.visitor_team_score;
+      if(this.teamId==n.home_team.id){
+        if(this.homeTeamScore>this.visitorTeamScore){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+         if(this.visitorTeamScore>this.homeTeamScore){
+          return true;
+        }else{
+           return false;
+        }
+      }
+    }
   },
   mounted(){
-    console.log(this.teamId);
     fetch(`https://www.balldontlie.io/api/v1/teams/${this.teamId}`)
             .then(res => res.json())
             .then(data => this.getTeamData(data))
+            .catch(err => console.log(err.message));
+    fetch(`https://www.balldontlie.io/api/v1/games/?seasons[]=2021&team_ids[]=${this.teamId}&per_page=100&postseason=false`)
+            .then(res => res.json())
+            .then(data => this.getLastGames(data))
             .catch(err => console.log(err.message));
   }
 }
@@ -156,14 +183,19 @@ export default {
   padding: 25px;
   color: white;
 }
+.games-container a{
+  text-decoration: none;
+  color: white;
+}
 .win{
   font-weight: bold;
   color: green;
-  visibility: hidden;
+  visibility: visible;
 }
 .lose{
   font-weight: bold;
   color: red;
+  visibility: visible;
 }
 .team{
   font-weight: bold;

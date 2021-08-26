@@ -2,8 +2,8 @@
     <div class="gamescore-all">
     <div class="gamescore-container">
         <div class="gamescore-header">
-            <h6>DEN 101 - SAC 102</h6>
-            <p>DATA</p>
+            <h6>{{this.homeTeam}} {{this.homeTeamScore}} - {{this.visitorTeam}} {{this.visitorTeamScore}}</h6>
+            <p>{{this.gameDate}}</p>
         </div>
         <div class="gamescore-content">
             <div class="teamscore-box">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="teamscore-content">
                     <ul class="players-stats">
-                        <li class="li" @click="openBox()"><div class="player-stats-name">Michael Jordan</div> <div class="player-stats-points">32</div> <div class="player-stats-assists">5</div> <div class="player-stats-blocks">3</div></li>
+                        <li class="li" @click="openBox(homePlayers[n].player.id)" v-for="(player,n) in homePlayers" :key="player.id"><div class="player-stats-name">{{player.player.first_name}} {{player.player.last_name}}</div> <div class="player-stats-points">{{player.pts}}</div> <div class="player-stats-assists">{{player.ast}}</div> <div class="player-stats-blocks">{{player.blk}}</div></li>
                     </ul>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="teamscore-content">
                     <ul class="players-stats">
-                        <li><div class="player-stats-name">Michael Jordan</div> <div class="player-stats-points">32</div> <div class="player-stats-assists">5</div> <div class="player-stats-blocks">3</div></li>
+                        <li class="li" @click="openBox(visitorPlayers[n].player.id)" v-for="(player,n) in visitorPlayers" :key="player.id"><div class="player-stats-name">{{player.player.first_name}} {{player.player.last_name}}</div> <div class="player-stats-points">{{player.pts}}</div> <div class="player-stats-assists">{{player.ast}}</div> <div class="player-stats-blocks">{{player.blk}}</div></li>
                     </ul>
                 </div>
             </div>
@@ -52,41 +52,41 @@
     </div>
     <div class="small-box">
         <div class="small-box-header">
-            <h6 class="small-box-h">PLAYER NAME</h6>
+            <h6 class="small-box-h">{{this.playerName}}  {{this.playerLast}}</h6>
         </div>
         <div class="small-box-minutes">
-            <h6 class="minutes">31;23 min</h6>
+            <h6 class="minutes">{{this.playerMin}}</h6>
         </div>
         <div class="small-box-content">
             <div class="small-box-row">
-                <div class="small-box-left-row">Points: <span>22</span></div>
-                <div class="small-box-center-row">Asists: <span> 2</span></div>
-                <div class="small-box-right-row">Blocks: <span> 2</span></div>
+                <div class="small-box-left-row">Points: <span> {{this.playerPts}} </span></div>
+                <div class="small-box-center-row">Asists: <span> {{this.playerAst}} </span></div>
+                <div class="small-box-right-row">Blocks: <span> {{this.playerBlk}} </span></div>
             </div>
             <div class="small-box-row">
-                <div class="small-box-left-row">Rebounds: <span> 2</span></div>
-                <div class="small-box-center-row">DRebeounds: <span> 8</span></div>
-                <div class="small-box-right-row">ORebounds: <span> 10</span></div>
+                <div class="small-box-left-row">Rebounds: <span> {{this.playerReb}} </span></div>
+                <div class="small-box-center-row">DRebeounds: <span> {{this.playerDReb}} </span></div>
+                <div class="small-box-right-row">ORebounds: <span> {{this.playerOReb}} </span></div>
             </div>
             <div class="small-box-row">
-                <div class="small-box-left-row">FG%: <span> 0.429</span></div>
-                <div class="small-box-center-row">FGA: <span> 21</span></div>
-                <div class="small-box-right-row">FGM: <span> 9</span></div>
+                <div class="small-box-left-row">FG%: <span> {{this.playerFGpct}} </span></div>
+                <div class="small-box-center-row">FGA: <span> {{this.playerFGA}} </span></div>
+                <div class="small-box-right-row">FGM: <span> {{this.playerFGM}} </span></div>
             </div>
             <div class="small-box-row">
-                <div class="small-box-left-row">FG3%: <span> 0.25</span></div>
-                <div class="small-box-center-row">FG3A: <span> 4</span></div>
-                <div class="small-box-right-row">FG3M: <span> 1</span></div>
+                <div class="small-box-left-row">FG3%: <span> {{this.playerFG3pct}} </span></div>
+                <div class="small-box-center-row">FG3A: <span> {{this.playerFG3A}} </span></div>
+                <div class="small-box-right-row">FG3M: <span> {{this.playerFG3M}} </span></div>
             </div>
             <div class="small-box-row">
-                <div class="small-box-left-row">FT%: <span> 0.8</span></div>
-                <div class="small-box-center-row">FTA: <span> 5</span></div>
-                <div class="small-box-right-row">FTM: <span> 4</span></div>
+                <div class="small-box-left-row">FT%: <span> {{this.playerFTpct}} </span></div>
+                <div class="small-box-center-row">FTA: <span> {{this.playerFTA}} </span></div>
+                <div class="small-box-right-row">FTM: <span> {{this.playerFTM}} </span></div>
             </div>
             <div class="small-box-row">
-                <div class="small-box-left-row">PF: <span> 3</span></div>
-                <div class="small-box-center-row">Turnovers: <span> 5</span></div>
-                <div class="small-box-right-row">Steals: <span> 1</span></div>
+                <div class="small-box-left-row">PF: <span> {{this.playerPF}} </span></div>
+                <div class="small-box-center-row">Turnovers: <span> {{this.playerTr}} </span></div>
+                <div class="small-box-right-row">Steals: <span> {{this.playerStl}} </span></div>
             </div>
         </div>
         <div class="small-box-footer">
@@ -98,24 +98,131 @@
 
 <script>
 export default {
+    props: ['id'],
     data(){
         return{
             isOpened: false,
+            gameId: this.$route.params.id,
+            homeTeam:null,
+            visitorTeam: null,
+            homeTeamScore: null,
+            visitorTeamScore: null,
+            gameDate: null,
+            homeTeamId: null,
+            visitorTeamId: null,
+            homePlayers:[],
+            visitorPlayers:[],
+            zeroPlayers: [],
+            singlePlayerStats:[],
+            playerId: null,
+            playerPts: null,
+            playerBlk: null,
+            playerAst: null,
+            playerReb: null,
+            playerOReb: null,
+            playerDReb: null,
+            playerFGpct: null,
+            playerFGA: null,
+            playerFGM: null,
+            playerFG3pct: null,
+            playerFG3A: null,
+            playerFG3M: null,
+            playerFTpct: null,
+            playerFTA: null,
+            playerFTM: null,
+            playerPF: null,
+            playerTr: null,
+            playerStl: null,
+            playerMin: null,
+            playerName: null,
+            playerLast: null,
         }
     },
     methods:{
-        openBox(){
+        openBox(n){
             if(!this.isOpened){
                 document.querySelector('.gamescore-container').style.filter="blur(5px)";
                 document.querySelector('.small-box').style.visibility="visible";
                 this.isOpened=true;
             }
+            this.playerId=n;
+            console.log(this.playerId);
+            fetch(`https://www.balldontlie.io/api/v1/stats/?game_ids[]=${this.gameId}&player_ids[]=${this.playerId}`)
+                .then(res => res.json())
+                .then(data => this.getSinglePlayerStats(data))
+                .catch(err => console.log(err.message));
         },
         closeBox(){
             this.isOpened=false;
             document.querySelector('.gamescore-container').style.filter="blur(0px)";
             document.querySelector('.small-box').style.visibility="hidden";
+        },
+        getGameStats(data){
+            this.homeTeam=data.home_team.abbreviation;
+            this.visitorTeam=data.visitor_team.abbreviation;
+            this.homeTeamScore=data.home_team_score;
+            this.visitorTeamScore=data.visitor_team_score;
+            this.gameDate=data.date;
+            this.homeTeamId=data.home_team.id;
+            this.visitorTeamId=data.visitor_team.id;
+        },
+        getPlayersStats(data){
+            //console.log(data.data);
+            data.data.forEach(element => {
+                if(element.team.id==this.homeTeamId){
+                    if(element.pts==0 && element.ast==0 && element.blk==0){
+                        this.zeroPlayers.push(element);
+                    }else{
+                        this.homePlayers.push(element);
+                    }
+                }else if(element.team.id==this.visitorTeamId){
+                    if(element.pts==0 && element.ast==0 && element.blk==0){
+                        this.zeroPlayers.push(element);
+                    }else{
+                        this.visitorPlayers.push(element);
+                    }
+                }
+            });
+            //console.log(this.homePlayers);
+            //console.log(this.visitorPlayers);
+            //console.log(this.zeroPlayers);
+        },
+        getSinglePlayerStats(data){
+            console.log(data);
+            data.data.forEach(element => {
+                this.playerPts=element.pts;
+                this.playerAst=element.ast;
+                this.playerReb=element.reb;
+                this.playerBlk=element.blk;
+                this.playerDReb=element.dreb;
+                this.playerOReb=element.oreb;
+                this.playerFGpct=element.fg_pct;
+                this.playerFGA=element.fga;
+                this.playerFGM=element.fgm;
+                this.playerFG3pct=element.fg3_pct;
+                this.playerFG3A=element.fg3a;
+                this.playerFG3M=element.fg3m;
+                this.playerFTpct=element.ft_pct;
+                this.playerFTA=element.fta;
+                this.playerFTM=element.ftm;
+                this.playerPF=element.pf;
+                this.playerTr=element.turnover;
+                this.playerStl=element.stl;
+                this.playerMin=element.min;
+                this.playerName=element.player.first_name;
+                this.playerLast=element.player.last_name;
+            });
         }
+    },
+    mounted(){
+        fetch(`https://www.balldontlie.io/api/v1/games/${this.gameId}`)
+            .then(res => res.json())
+            .then(data => this.getGameStats(data))
+            .catch(err => console.log(err.message));
+        fetch(`https://www.balldontlie.io/api/v1/stats/?game_ids[]=${this.gameId}&per_page=100`)
+            .then(res => res.json())
+            .then(data => this.getPlayersStats(data))
+            .catch(err => console.log(err.message));
     }
 }
 </script>

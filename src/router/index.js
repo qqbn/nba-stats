@@ -34,9 +34,10 @@ const routes = [
     component: Player,
   },
   {
-    path: '/gameScore',
+    path: '/gameScore/:id',
     name: 'GameScore',
-    component: GameScore
+    component: GameScore,
+    props: true
   }
 ]
 
