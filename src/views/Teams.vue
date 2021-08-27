@@ -25,26 +25,20 @@ export default {
     return{
       eastTeams: [],
       westTeams: [],
-      test: null,
-      teams: [],
     }
   },
   methods:{
-      showTeams(){
-        this.westTeams.forEach(element => {
-          console.log(element.full_name);
-        });
-      },
-      getData(data){
+     getData(data){
         data.data.forEach(element => {
           if(element.conference==="West"){
             this.westTeams.push(element);
-          }else{
+          }
+          else{
             this.eastTeams.push(element);
           }
-        });;
-        console.log(this.westTeams);
-        console.log(this.eastTeams);
+        });
+        //console.log(this.westTeams);
+        //console.log(this.eastTeams);
       }
   },
   mounted(){
@@ -52,7 +46,6 @@ export default {
             .then(res => res.json())
             .then(data => this.getData(data))
             .catch(err => console.log(err.message));
-
   },
 }
 </script>
@@ -86,7 +79,7 @@ align-items: center;
 flex-direction: column;
 background-color: #D28508;
 border-radius: 10px;
-box-shadow: 0px 0px 10px grey;
+box-shadow: 0px 5px 10px black;
 }
 .east-conference{
 height: 600px;
@@ -97,7 +90,7 @@ align-items: center;
 flex-direction: column;
 background-color: #D28508;
 border-radius: 10px;
-box-shadow: 0px 0px 10px grey;
+box-shadow: 0px 5px 10px black;
 }
 .east-conference:hover .conference-title{
     font-size: 32px;
@@ -165,6 +158,9 @@ box-shadow: 0px 0px 10px grey;
   .west-conference ul li {
     font-size: 16px;
   }
+  .conference-teams a:hover{
+    font-size: 16px;
+  }
   .conference-title{
     font-size: 24px;
   }
@@ -183,11 +179,14 @@ box-shadow: 0px 0px 10px grey;
     font-size: 16px;
   }
 }
-@media only screen and (max-width: 400px){
+@media only screen and (max-width: 430px){
    .west-conference ul li {
     font-size: 12px;
   }
   .east-conference ul li {
+    font-size: 12px;
+  }
+   .conference-teams a:hover{
     font-size: 12px;
   }
   .conference-title{

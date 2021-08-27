@@ -2,20 +2,20 @@
   <div class="player-container">
       <div class="left-stats">
           <div class="left-stats-header">
-              <p> <span>Player:</span> Lebron James </p>
+              <p> <span>Player:</span> {{this.playerFirstName}} {{this.playerLastName}} </p>
           </div>
           <div class="left-stats-content">
               <div class="left-single-row">
-                  <p><span>Team:</span> Los Angeles Lakers</p>
+                  <p><span>Team:</span> {{this.playerTeam}}</p>
               </div>
               <div class="left-single-row">
-                  <p><span>Position:</span> Los Angeles Lakers</p>
+                  <p><span class="span">Position:</span> <span v-show="playerPosition">{{this.playerPosition}}</span> <span v-show="!playerPosition"> No data</span></p>
               </div>
               <div class="left-single-row">
-                  <p><span>Heigth:</span> Los Angeles Lakers</p>
+                  <p><span class="span">Heigth:</span> <span v-show="playerHeightF">{{this.playerHeightF}}'{{this.playerHeightI}}</span> <span v-show="!playerHeightF"> No data</span></p>
               </div>
               <div class="left-single-row">
-                  <p><span>Weight:</span> Los Angeles Lakers</p>
+                  <p><span class="span">Weight:</span> <span v-show="playerWeight"> {{this.playerWeight}} pounds</span> <span v-show="!playerWeight">No data</span></p>
               </div>
           </div>
       </div>
@@ -23,99 +23,103 @@
           <div class="right-stats-header">
               <p>Averages of <span>2020</span> season</p>
           </div>
-          <div class="right-stats-content">
-              <div class="right-stats-row">
+          <ul class="right-stats-content">
+              <li class="right-stats-row" v-for="stat  in testArr" :key="stat.id" v-show="played">
                   <div class="row-left">
-                      <p>Games Played: <span> 37</span></p>
+                      <p>{{Object.keys(stat)[0]}}: <span>{{Object.values(stat)[0]}} </span></p>
                   </div>
                   <div class="row-right">
-                      <p>Minutes: <span> 34:46</span></p>
+                      <p>{{Object.keys(stat)[1]}}: <span> {{Object.values(stat)[1]}}</span></p>
                   </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                     <p>FGM <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>FGA <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                     <p>FG3M <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>FG3A <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>FTM <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>FTA <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>OREB <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>DREB <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                     <p>REB <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>AST <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>STL <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>BLK <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>Turnover <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>PF <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>Points <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>FG% <span> 34:46</span></p>
-                  </div>
-              </div>
-              <div class="right-stats-row">
-                  <div class="row-left">
-                      <p>FG3% <span> 37</span></p>
-                  </div>
-                  <div class="row-right">
-                      <p>FT% <span> 34:46</span></p>
-                  </div>
-              </div>
-          </div>
+              </li>
+              <h3 v-show="notPlayed">Player has not played 2020 season</h3>
+          </ul>
       </div>
   </div>
 </template>
 
 <script>
 export default {
+data(){
+    return{
+        playerId: this.$route.params.id,
+        playerFirstName: null,
+        playerLastName: null,
+        playerTeam: null,
+        playerPosition: null,
+        playerWeight: null,
+        playerHeightF: null,
+        playerHeightI: null,
+        playerAvg:[],
+        testArr:[],
+        played: false,
+        notPlayed: true,
+    }
+},
+methods:{
+    getPlayerInfo(data){
+        //console.log(data);
+        this.playerFirstName=data.first_name;
+        this.playerLastName=data.last_name;
+        this.playerTeam=data.team.full_name;
+        this.playerPosition=data.position;
+        this.playerWeight=data.weight_pounds;
+        this.playerHeightF=data.height_feet;
+        this.playerHeightI=data.height_inches;
+    },
 
+    getPlayerAverages(data){
+        console.log(data);
+        if(data.data.length>0){
+            this.notPlayed=false;
+            const test2=data.data[0];
+            const {season,player_id, ...newObj} = test2;
+
+            Object.entries(newObj).forEach(element =>{
+                var key=element[0];
+                key=this.firstNameCapital(key);
+                var testObj={};
+                testObj[key]=element[1];
+                this.playerAvg.push(testObj)
+            })
+
+            for(let i=0;i<20;i+=2){
+                let merged={...this.playerAvg[i], ...this.playerAvg[i+1]}
+                this.testArr.push(merged);
+            }
+
+            console.log(this.testArr);
+            if(this.testArr.length>0){
+                this.played=true;
+            }
+        }
+    },
+    firstNameCapital(string){
+        let test=string.charAt(0).toUpperCase() + string.slice(1);
+        test=test.replace(/_/g, ' ');
+        test=test.replace(/pct/g, '%');
+        return test;
+  },
+},
+    mounted(){
+
+        fetch(`https://www.balldontlie.io/api/v1/players/${this.playerId}`)
+                .then(res => res.json())
+                .then(data => this.getPlayerInfo(data))
+                .catch(err => console.log(err.message));
+
+        fetch(`https://www.balldontlie.io/api/v1/season_averages?season=2020&player_ids[]=${this.playerId}`)
+                .then(res => res.json())
+                .then(data => this.getPlayerAverages(data))
+                .catch(err => console.log(err.message));
+    }
 }
 </script>
 
 <style>
+h3{
+    color: #3F3D56;
+}
 .player-container{
     width: 100%;
     height: 88vh;
@@ -185,7 +189,7 @@ export default {
 .left-single-row p{
     padding: 20px;
 }
-.left-single-row span{
+.span{
     color: white;
     text-decoration: underline #D28508;
 }

@@ -141,7 +141,6 @@ export default {
     methods:{
         openBox(n){
             if(!this.isOpened){
-                document.querySelector('.gamescore-container').style.filter="blur(5px)";
                 document.querySelector('.small-box').style.visibility="visible";
                 this.isOpened=true;
             }
@@ -154,7 +153,6 @@ export default {
         },
         closeBox(){
             this.isOpened=false;
-            document.querySelector('.gamescore-container').style.filter="blur(0px)";
             document.querySelector('.small-box').style.visibility="hidden";
         },
         getGameStats(data){
@@ -170,7 +168,7 @@ export default {
             //console.log(data.data);
             data.data.forEach(element => {
                 if(element.team.id==this.homeTeamId){
-                    if(element.pts==0 && element.ast==0 && element.blk==0){
+                    if(element.pts==0 && element.ast==0 && element.blk==0 && element.stl==0 && element.reb==0){
                         this.zeroPlayers.push(element);
                     }else{
                         this.homePlayers.push(element);
@@ -183,10 +181,8 @@ export default {
                     }
                 }
             });
-            //console.log(this.homePlayers);
-            //console.log(this.visitorPlayers);
-            //console.log(this.zeroPlayers);
         },
+
         getSinglePlayerStats(data){
             console.log(data);
             data.data.forEach(element => {
@@ -215,10 +211,12 @@ export default {
         }
     },
     mounted(){
+
         fetch(`https://www.balldontlie.io/api/v1/games/${this.gameId}`)
             .then(res => res.json())
             .then(data => this.getGameStats(data))
             .catch(err => console.log(err.message));
+
         fetch(`https://www.balldontlie.io/api/v1/stats/?game_ids[]=${this.gameId}&per_page=100`)
             .then(res => res.json())
             .then(data => this.getPlayersStats(data))

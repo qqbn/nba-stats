@@ -57,6 +57,7 @@ export default {
       this.teamDivision=data.division;
       this.teamAbbreviation=data.abbreviation;
     },
+
     getLastGames(data){
       data.data.reverse();
       data.data.forEach(element => {
@@ -66,16 +67,19 @@ export default {
       });
       console.log(this.lastGames);
     },
+
     whoWin(n){
       this.homeTeamScore=n.home_team_score;
       this.visitorTeamScore=n.visitor_team_score;
       if(this.teamId==n.home_team.id){
         if(this.homeTeamScore>this.visitorTeamScore){
           return true;
-        }else{
+        }
+        else{
           return false;
         }
-      }else{
+      }
+      else{
          if(this.visitorTeamScore>this.homeTeamScore){
           return true;
         }else{
@@ -84,11 +88,14 @@ export default {
       }
     }
   },
+
   mounted(){
+
     fetch(`https://www.balldontlie.io/api/v1/teams/${this.teamId}`)
             .then(res => res.json())
             .then(data => this.getTeamData(data))
             .catch(err => console.log(err.message));
+
     fetch(`https://www.balldontlie.io/api/v1/games/?seasons[]=2021&team_ids[]=${this.teamId}&per_page=100&postseason=false`)
             .then(res => res.json())
             .then(data => this.getLastGames(data))
@@ -333,7 +340,7 @@ flex-direction: column;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  font-size: 24px;
+  font-size: 22px;
 }
 .info-header span{
   padding: 20px;

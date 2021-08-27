@@ -54,6 +54,7 @@ align-items: flex-end;
   height: 500px;
   background-color: #D28508;
   border-radius: 20px;
+  box-shadow: 0px 5px 10px black;
 }
 .header-home{
 width: 100%;
